@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from app.models.schemas import MorningPlanRequest, MorningPlanResponse
 from app.models.schemas import EveningReviewRequest, EveningReviewResponse
+from app.services.gemini_client import get_morning_plan
+
 app = FastAPI()
 
 @app.get("/health")
@@ -9,7 +11,8 @@ def health_check():
 
 @app.post("/morning-plan")
 def morning_plan(request: MorningPlanRequest):
-    return {"message": "Received your plan request", "tasks": request.tasks}
+    plan = get_morning_plan(request.tasks, request.goals, request.blockers)
+    return {"plan": plan}
 
 @app.post("/evening-review")
 def evening_review(request: EveningReviewRequest):
