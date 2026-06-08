@@ -29,3 +29,28 @@ def get_morning_plan(tasks: list, goals: list, blockers: list) -> str:
         contents=prompt
     )
     return response.text
+
+def get_evening_review(completed_tasks: list, incomplete_tasks: list, new_blockers: list, mood: str = None) -> str:
+    prompt = f"""
+    You are an expert productivity coach.
+    Analyze the user's day based on the following information:
+
+    Completed Tasks: {completed_tasks}
+    Incomplete Tasks: {incomplete_tasks}
+    New Blockers: {new_blockers}
+    Mood: {mood}
+
+    Provide:
+    1. Analysis of completed tasks and productivity patterns
+    2. Reasons incomplete tasks may have been missed
+    3. Suggestions to overcome the reported blockers
+    4. A prioritized plan for tomorrow
+    5. One actionable improvement for the next day
+
+    Keep the response practical, concise, and supportive.
+    """
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt
+    )
+    return response.text
