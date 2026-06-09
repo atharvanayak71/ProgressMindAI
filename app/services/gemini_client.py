@@ -1,10 +1,11 @@
 import os
 from dotenv import load_dotenv
-from google import genai
+from groq import Groq
+
 
 load_dotenv()
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def get_morning_plan(tasks: list, goals: list, blockers: list) -> str:
     prompt = f"""
@@ -24,11 +25,14 @@ def get_morning_plan(tasks: list, goals: list, blockers: list) -> str:
     
     Be concise, friendly, and actionable.
     """
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt
+    response = client.chat.completions.create(
+    model="openai/gpt-oss-20b",
+    messages=[
+        {"role": "user", "content": prompt}
+    ]
     )
-    return response.text
+
+    return response.choices[0].message.content
 
 def get_evening_review(completed_tasks: list, incomplete_tasks: list, new_blockers: list, mood: str = None) -> str:
     prompt = f"""
@@ -49,8 +53,11 @@ def get_evening_review(completed_tasks: list, incomplete_tasks: list, new_blocke
 
     Keep the response practical, concise, and supportive.
     """
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt
+    response = client.chat.completions.create(
+    model="openai/gpt-oss-20b",
+    messages=[
+        {"role": "user", "content": prompt}
+    ]
     )
-    return response.text
+
+    return response.choices[0].message.content
