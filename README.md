@@ -31,7 +31,7 @@ Built with FastAPI for speed, scalability, and clean API development.
 * Python
 * FastAPI
 * Pydantic
-* Gemini API
+* Groq API
 * Uvicorn
 * Git
 * GitHub
